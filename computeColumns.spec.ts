@@ -92,4 +92,17 @@ describe('computeColumns', () => {
     ]);
   })
 
+  it('works on a triple on non consecutive months, while hiding empty columns', () => {
+    const result = computeColumns([
+      { publication_date: date('2025-01-17') },
+      { publication_date: date('2025-02-22') },
+      { publication_date: date('2025-04-12') },
+    ], true);
+    expect(result).to.eql([
+      date('2025-01-01'),
+      date('2025-02-01'),
+      date('2025-04-01'),
+    ]);
+  })
+
 })
