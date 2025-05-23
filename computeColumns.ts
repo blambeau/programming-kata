@@ -1,4 +1,4 @@
-export const computeColumns = (cards) => {
+export const computeColumns = (cards, hide_empty_columns = false) => {
   if (!cards.length) return [];
 
   const months = cards.map(c => c.publication_date.startOf('month')).sort();
