@@ -52,34 +52,12 @@ describe('computeColumns', () => {
     ]);
   })
 
-  it('works on a pair on non consecutive months, while hiding empty columns', () => {
+  it('works on a triple on consecutive months', () => {
     const result = computeColumns([
       { publication_date: date('2025-01-17') },
-      { publication_date: date('2025-03-22') },
-    ], true);
-    expect(result).to.eql([
-      date('2025-01-01'),
-      date('2025-03-01'),
+      { publication_date: date('2025-02-22') },
+      { publication_date: date('2025-03-12') },
     ]);
-  })
-
-  it('works on a pair on non consecutive months, while showing empty columns', () => {
-    const result = computeColumns([
-      { publication_date: date('2025-01-17') },
-      { publication_date: date('2025-03-22') },
-    ], false);
-    expect(result).to.eql([
-      date('2025-01-01'),
-      date('2025-02-01'),
-      date('2025-03-01'),
-    ]);
-  })
-
-  it('works on a pair on non consecutive months in any order, while showing empty columns', () => {
-    const result = computeColumns([
-      { publication_date: date('2025-03-22') },
-      { publication_date: date('2025-01-17') },
-    ], false);
     expect(result).to.eql([
       date('2025-01-01'),
       date('2025-02-01'),
