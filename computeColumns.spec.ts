@@ -20,4 +20,25 @@ describe('computeColumns', () => {
     ]);
   })
 
+  it('works on a pair within same month', () => {
+    const result = computeColumns([
+      { publication_date: date('2025-01-17') },
+      { publication_date: date('2025-01-22') },
+    ]);
+    expect(result).to.eql([
+      date('2025-01-01')
+    ]);
+  })
+
+  it('works on a pair on consecutive months', () => {
+    const result = computeColumns([
+      { publication_date: date('2025-01-17') },
+      { publication_date: date('2025-02-22') },
+    ]);
+    expect(result).to.eql([
+      date('2025-01-01'),
+      date('2025-02-01')
+    ]);
+  })
+
 })

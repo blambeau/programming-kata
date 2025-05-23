@@ -1,5 +1,12 @@
 export const computeColumns = (cards) => {
   if (!cards.length) return [];
 
-  return [cards[0].publication_date.startOf('month')]
+  const months = cards.map(c => c.publication_date.startOf('month'));
+  const min = months[0];
+  const max = months[months.length-1];
+  if (min.equals(max)) {
+    return [min];
+  } else {
+    return [min, max];
+  }
 }
