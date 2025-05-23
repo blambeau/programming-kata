@@ -63,4 +63,16 @@ describe('computeColumns', () => {
     ]);
   })
 
+  it('works on a pair on non consecutive months, while showing empty columns', () => {
+    const result = computeColumns([
+      { publication_date: date('2025-01-17') },
+      { publication_date: date('2025-03-22') },
+    ], false);
+    expect(result).to.eql([
+      date('2025-01-01'),
+      date('2025-02-01'),
+      date('2025-03-01'),
+    ]);
+  })
+
 })
