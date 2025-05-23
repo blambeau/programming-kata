@@ -26,6 +26,15 @@ const isMinimal = (cards: Card[], result: DateTime[]) => {
   });
 }
 
+const isCompact = (cards: Card[], result: DateTime[]) => {
+  return result.every(month => {
+    return cards.some(card => {
+      const d = card.publication_date;
+      return month <= d && d <= month.plus({month: 1})
+    })
+  })
+}
+
 describe('computeColumns', () => {
 
   it('works on the empty case', () => {
@@ -136,6 +145,7 @@ describe('computeColumns', () => {
     ]);
     expect(isComplete(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
+    expect(!isCompact(cards, result)).to.eql(true);
   })
 
   it('works on a triple on non consecutive months, while hiding empty columns', () => {
@@ -152,6 +162,7 @@ describe('computeColumns', () => {
     ]);
     expect(isComplete(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
+    expect(isCompact(cards, result)).to.eql(true);
   })
 
 })
