@@ -46,6 +46,21 @@ const isCompact = (cards: Card[], result: DateTime[]) => {
   })
 }
 
+const randomDateTime = (start: DateTime = DateTime.fromISO('2024-01-01'), end: DateTime = DateTime.fromISO('2026-01-01')): DateTime => {
+  const startMillis = start.toMillis();
+  const endMillis = end.toMillis();
+  const randomMillis = startMillis + Math.random() * (endMillis - startMillis);
+  return DateTime.fromMillis(randomMillis);
+}
+
+const randomDateTimesArray = (count: number): DateTime[] => {
+  const dates: DateTime[] = [];
+  for (let i = 0; i < count; i++) {
+    dates.push(randomDateTime());
+  }
+  return dates;
+}
+
 describe('computeColumns', () => {
 
   it('works on the empty case', () => {
@@ -183,6 +198,29 @@ describe('computeColumns', () => {
     expect(!isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
     expect(isCompact(cards, result)).to.eql(true);
+  })
+
+  it('works on random data, while showing all columns', () => {
+    [0, 1, 5, 10, 20, 40].every(size => {
+      const cards: Card[] = randomDateTimesArray(size).map(date => {
+        return { publication_date: date };
+      });
+      const result = computeColumns(cards);
+      expect(isComplete(cards, result)).to.eql(true);
+      expect(isContinuous(cards, result)).to.eql(true);
+      expect(isMinimal(cards, result)).to.eql(true);
+    })
+  })
+
+  it('works on random data, while hiding empty columns', () => {
+    [0, 1, 5, 10, 20, 40].every(size => {
+      const cards: Card[] = randomDateTimesArray(size).map(date => {
+        return { publication_date: date };
+      });
+      const result = computeColumns(cards, true);
+      expect(isComplete(cards, result)).to.eql(true);
+      expect(isMinimal(cards, result)).to.eql(true);
+    })
   })
 
 })
