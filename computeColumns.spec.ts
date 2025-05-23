@@ -13,6 +13,19 @@ const isComplete = (cards: Card[], result: DateTime[]) => {
   })
 }
 
+const isMinimal = (cards: Card[], result: DateTime[]) => {
+  if (cards.length === 0) return result.length === 0;
+
+  const first = result[0];
+  const last = result[result.length - 1];
+  return [first, last].every(month => {
+    return cards.some(card => {
+      const d = card.publication_date;
+      return first <= d && d <= first.plus({month: 1})
+    });
+  });
+}
+
 describe('computeColumns', () => {
 
   it('works on the empty case', () => {
@@ -20,6 +33,7 @@ describe('computeColumns', () => {
     const result = computeColumns(cards);
     expect(result).to.eql([]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a singleton', () => {
@@ -31,6 +45,7 @@ describe('computeColumns', () => {
       date('2025-01-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a pair within same month', () => {
@@ -43,6 +58,7 @@ describe('computeColumns', () => {
       date('2025-01-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a pair on consecutive months', () => {
@@ -56,6 +72,7 @@ describe('computeColumns', () => {
       date('2025-02-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a pair on anti-consecutive months', () => {
@@ -69,6 +86,7 @@ describe('computeColumns', () => {
       date('2025-02-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a triple on consecutive months', () => {
@@ -84,6 +102,7 @@ describe('computeColumns', () => {
       date('2025-03-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a triple on consecutive months in any order', () => {
@@ -99,6 +118,7 @@ describe('computeColumns', () => {
       date('2025-03-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a triple on non consecutive months', () => {
@@ -115,6 +135,7 @@ describe('computeColumns', () => {
       date('2025-04-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
   it('works on a triple on non consecutive months, while hiding empty columns', () => {
@@ -130,6 +151,7 @@ describe('computeColumns', () => {
       date('2025-04-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isMinimal(cards, result)).to.eql(true);
   })
 
 })
