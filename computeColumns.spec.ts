@@ -41,4 +41,15 @@ describe('computeColumns', () => {
     ]);
   })
 
+  it('works on a pair on anti-consecutive months', () => {
+    const result = computeColumns([
+      { publication_date: date('2025-02-22') },
+      { publication_date: date('2025-01-17') },
+    ]);
+    expect(result).to.eql([
+      date('2025-01-01'),
+      date('2025-02-01')
+    ]);
+  })
+
 })
