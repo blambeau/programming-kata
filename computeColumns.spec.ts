@@ -65,4 +65,31 @@ describe('computeColumns', () => {
     ]);
   })
 
+  it('works on a triple on consecutive months in any order', () => {
+    const result = computeColumns([
+      { publication_date: date('2025-02-22') },
+      { publication_date: date('2025-01-17') },
+      { publication_date: date('2025-03-12') },
+    ]);
+    expect(result).to.eql([
+      date('2025-01-01'),
+      date('2025-02-01'),
+      date('2025-03-01'),
+    ]);
+  })
+
+  it('works on a triple on non consecutive months', () => {
+    const result = computeColumns([
+      { publication_date: date('2025-01-17') },
+      { publication_date: date('2025-02-22') },
+      { publication_date: date('2025-04-12') },
+    ]);
+    expect(result).to.eql([
+      date('2025-01-01'),
+      date('2025-02-01'),
+      date('2025-03-01'),
+      date('2025-04-01'),
+    ]);
+  })
+
 })
