@@ -13,6 +13,17 @@ const isComplete = (cards: Card[], result: DateTime[]) => {
   })
 }
 
+const isContinuous = (cards: Card[], result: DateTime[]) => {
+  return result.reduce((pair, month) => {
+    const oldTruth = pair[0];
+    const prevMonth = pair[1];
+    return [
+      oldTruth && (prevMonth === null || month.equals(prevMonth.plus({month: 1}))),
+      month,
+    ]
+  }, [true, null])[0];
+}
+
 const isMinimal = (cards: Card[], result: DateTime[]) => {
   if (cards.length === 0) return result.length === 0;
 
@@ -42,6 +53,7 @@ describe('computeColumns', () => {
     const result = computeColumns(cards);
     expect(result).to.eql([]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
   })
 
@@ -54,6 +66,7 @@ describe('computeColumns', () => {
       date('2025-01-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
   })
 
@@ -67,6 +80,7 @@ describe('computeColumns', () => {
       date('2025-01-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
   })
 
@@ -81,6 +95,7 @@ describe('computeColumns', () => {
       date('2025-02-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
   })
 
@@ -95,6 +110,7 @@ describe('computeColumns', () => {
       date('2025-02-01')
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
   })
 
@@ -111,6 +127,7 @@ describe('computeColumns', () => {
       date('2025-03-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
   })
 
@@ -127,6 +144,7 @@ describe('computeColumns', () => {
       date('2025-03-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
   })
 
@@ -144,6 +162,7 @@ describe('computeColumns', () => {
       date('2025-04-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
     expect(!isCompact(cards, result)).to.eql(true);
   })
@@ -161,6 +180,7 @@ describe('computeColumns', () => {
       date('2025-04-01'),
     ]);
     expect(isComplete(cards, result)).to.eql(true);
+    expect(!isContinuous(cards, result)).to.eql(true);
     expect(isMinimal(cards, result)).to.eql(true);
     expect(isCompact(cards, result)).to.eql(true);
   })
