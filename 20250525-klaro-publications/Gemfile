@@ -1,0 +1,8 @@
+source "https://rubygems.org"
+
+gem "bmg", path: "~/Devel/bmg"
+gem "sequel"
+gem "sqlite3"
+gem "activesupport"
+gem "minitest"
+gem "path"
